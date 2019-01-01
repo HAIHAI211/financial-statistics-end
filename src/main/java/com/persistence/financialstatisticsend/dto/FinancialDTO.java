@@ -2,6 +2,7 @@ package com.persistence.financialstatisticsend.dto;
 
 import com.persistence.financialstatisticsend.dataobject.FinancialDetail;
 import lombok.Data;
+import org.springframework.context.annotation.Bean;
 
 import java.math.BigDecimal;
 import java.util.Date;

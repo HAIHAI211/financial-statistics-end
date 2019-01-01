@@ -8,4 +8,4 @@ spring:
     show-sql: true
 server:
   servlet:
-    context-path: /financial
+    context-path: /harrisonlanny
