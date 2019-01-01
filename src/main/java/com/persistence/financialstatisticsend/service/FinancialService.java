@@ -1,5 +1,6 @@
 package com.persistence.financialstatisticsend.service;
 
+import com.persistence.financialstatisticsend.dataobject.FinancialCategory;
 import com.persistence.financialstatisticsend.dataobject.FinancialDetail;
 import com.persistence.financialstatisticsend.dataobject.FinancialMaster;
 import com.persistence.financialstatisticsend.dto.FinancialDTO;
@@ -20,5 +21,8 @@ public interface FinancialService {
 
     /*删除报表*/
     void delete(Integer masterId);
+
+    /*获取类别*/
+    List<FinancialCategory> getFinancialCategoryList();
 
 }

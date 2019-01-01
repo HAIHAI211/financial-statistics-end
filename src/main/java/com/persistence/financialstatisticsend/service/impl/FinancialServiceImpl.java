@@ -1,8 +1,10 @@
 package com.persistence.financialstatisticsend.service.impl;
 
+import com.persistence.financialstatisticsend.dataobject.FinancialCategory;
 import com.persistence.financialstatisticsend.dataobject.FinancialDetail;
 import com.persistence.financialstatisticsend.dataobject.FinancialMaster;
 import com.persistence.financialstatisticsend.dto.FinancialDTO;
+import com.persistence.financialstatisticsend.repository.FinancialCategoryRepository;
 import com.persistence.financialstatisticsend.repository.FinancialDetailRepository;
 import com.persistence.financialstatisticsend.repository.FinancialMasterRepository;
 import com.persistence.financialstatisticsend.service.FinancialService;
@@ -26,6 +28,14 @@ public class FinancialServiceImpl implements FinancialService {
 
     @Autowired
     private FinancialDetailRepository detailRepository;
+
+    @Autowired
+    private FinancialCategoryRepository categoryRepository;
+
+    @Override
+    public List<FinancialCategory> getFinancialCategoryList() {
+        return categoryRepository.findAll();
+    }
 
     @Override
     @Transactional

@@ -1,5 +1,6 @@
 package com.persistence.financialstatisticsend.service.impl;
 
+import com.persistence.financialstatisticsend.dataobject.FinancialCategory;
 import com.persistence.financialstatisticsend.dataobject.FinancialDetail;
 import com.persistence.financialstatisticsend.dto.FinancialDTO;
 import com.persistence.financialstatisticsend.enums.FinancialUserEnum;
@@ -56,5 +57,11 @@ public class FinancialServiceImplTest {
 
     @Test
     public void delete() {
+    }
+
+    @Test
+    public void getFinancialCategoryList(){
+        List<FinancialCategory> financialCategoryList = financialService.getFinancialCategoryList();
+        Assert.assertNotEquals(0, financialCategoryList.size());
     }
 }
