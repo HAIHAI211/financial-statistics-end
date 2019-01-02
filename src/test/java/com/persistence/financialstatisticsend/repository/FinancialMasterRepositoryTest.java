@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -44,5 +45,13 @@ public class FinancialMasterRepositoryTest {
 
         FinancialMaster result = repository.save(financialMaster);
         Assert.assertNotNull(result);
+    }
+
+    @Test
+    public void findDistinctByFinancialDateBetween() throws Exception{
+        Date startDate = DateUtils.getDateByStr("2018-01-02 00:00:00", "yyyy-MM-dd HH:mm:ss");
+        Date endDate = DateUtils.getDateByStr("2019-11-02 23:59:59", "yyyy-MM-dd HH:mm:ss");
+        Optional<FinancialMaster> financialMasterOptional = repository.findFirstByFinancialDateBetween(startDate, endDate);
+        Assert.assertNotNull(financialMasterOptional.get());
     }
 }
