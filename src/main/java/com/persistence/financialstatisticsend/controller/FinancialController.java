@@ -1,6 +1,7 @@
 package com.persistence.financialstatisticsend.controller;
 
 import com.persistence.financialstatisticsend.dataobject.FinancialCategory;
+import com.persistence.financialstatisticsend.dataobject.FinancialUser;
 import com.persistence.financialstatisticsend.dto.FinancialDTO;
 import com.persistence.financialstatisticsend.service.FinancialService;
 import com.persistence.financialstatisticsend.utils.ResultVoUtils;
@@ -28,6 +29,12 @@ public class FinancialController {
     public ResultVo getCategory(){
         List<FinancialCategory> financialCategoryList = financialService.getFinancialCategoryList();
         return ResultVoUtils.success(financialCategoryList);
+    }
+
+    @GetMapping("user")
+    public ResultVo getUser(){
+        List<FinancialUser> financialUserList = financialService.getFinancialUserList();
+        return ResultVoUtils.success(financialUserList);
     }
 
 }

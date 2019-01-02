@@ -3,6 +3,7 @@ package com.persistence.financialstatisticsend.service;
 import com.persistence.financialstatisticsend.dataobject.FinancialCategory;
 import com.persistence.financialstatisticsend.dataobject.FinancialDetail;
 import com.persistence.financialstatisticsend.dataobject.FinancialMaster;
+import com.persistence.financialstatisticsend.dataobject.FinancialUser;
 import com.persistence.financialstatisticsend.dto.FinancialDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,5 +25,8 @@ public interface FinancialService {
 
     /*获取类别*/
     List<FinancialCategory> getFinancialCategoryList();
+
+    /*获取用户*/
+    List<FinancialUser> getFinancialUserList();
 
 }

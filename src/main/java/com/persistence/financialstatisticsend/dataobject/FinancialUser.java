@@ -1,5 +1,6 @@
 package com.persistence.financialstatisticsend.dataobject;
 
+import com.persistence.financialstatisticsend.enums.FinancialSexEnum;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -18,4 +19,6 @@ public class FinancialUser {
     private Integer userId;
 
     private String userName;
+
+    private Integer userSex = FinancialSexEnum.MEN.getCode();
 }

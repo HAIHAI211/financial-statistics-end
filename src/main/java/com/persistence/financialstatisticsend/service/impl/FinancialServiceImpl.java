@@ -3,10 +3,12 @@ package com.persistence.financialstatisticsend.service.impl;
 import com.persistence.financialstatisticsend.dataobject.FinancialCategory;
 import com.persistence.financialstatisticsend.dataobject.FinancialDetail;
 import com.persistence.financialstatisticsend.dataobject.FinancialMaster;
+import com.persistence.financialstatisticsend.dataobject.FinancialUser;
 import com.persistence.financialstatisticsend.dto.FinancialDTO;
 import com.persistence.financialstatisticsend.repository.FinancialCategoryRepository;
 import com.persistence.financialstatisticsend.repository.FinancialDetailRepository;
 import com.persistence.financialstatisticsend.repository.FinancialMasterRepository;
+import com.persistence.financialstatisticsend.repository.FinancialUserRepository;
 import com.persistence.financialstatisticsend.service.FinancialService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +34,17 @@ public class FinancialServiceImpl implements FinancialService {
     @Autowired
     private FinancialCategoryRepository categoryRepository;
 
+    @Autowired
+    private FinancialUserRepository userRepository;
+
     @Override
     public List<FinancialCategory> getFinancialCategoryList() {
-        return categoryRepository.findAll();
+        return categoryRepository.findAllByOrderByCategoryTypeAsc();
+    }
+
+    @Override
+    public List<FinancialUser> getFinancialUserList() {
+        return userRepository.findAllByOrderByUserIdAsc();
     }
 
     @Override
