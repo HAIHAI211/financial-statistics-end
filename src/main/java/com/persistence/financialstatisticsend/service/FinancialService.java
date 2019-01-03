@@ -29,4 +29,7 @@ public interface FinancialService {
     /*获取用户*/
     List<FinancialUser> getFinancialUserList();
 
+    /*更新报表*/
+    FinancialDTO update(FinancialDTO financialDTO);
+
 }

@@ -6,6 +6,8 @@ import com.persistence.financialstatisticsend.dataobject.FinancialMaster;
 import com.persistence.financialstatisticsend.dataobject.FinancialUser;
 import com.persistence.financialstatisticsend.dto.DateInfoDTO;
 import com.persistence.financialstatisticsend.dto.FinancialDTO;
+import com.persistence.financialstatisticsend.enums.FinancialDebtEnum;
+import com.persistence.financialstatisticsend.enums.FinancialPayEnum;
 import com.persistence.financialstatisticsend.enums.ResultEnum;
 import com.persistence.financialstatisticsend.exception.FinancialException;
 import com.persistence.financialstatisticsend.repository.FinancialCategoryRepository;
@@ -58,6 +60,65 @@ public class FinancialServiceImpl implements FinancialService {
     @Override
     @Transactional
     public FinancialDTO create(FinancialDTO financialDTO) {
+
+        // 获取financialDate，判断数据库中是否有重复月份
+        LocalDate financialDate = financialDTO.getFinancialDate();
+        financialDate = financialDate.withDayOfMonth(1); // 统一设置日期为1号
+        Optional<FinancialMaster> financialMasterOptional =  masterRepository.findFirstByFinancialDate(financialDate);
+        if (financialMasterOptional.isPresent()) { // 新增月份重复
+            throw new FinancialException(ResultEnum.MASTER_MONTH_EXIST);
+        }
+
+        // 拷贝属性DTO->dataobject(实际上只需要拷贝financialDate字段即可)
+        FinancialMaster financialMaster = new FinancialMaster();
+        BeanUtils.copyProperties(financialDTO, financialMaster);
+
+        // 统计总收入
+        BigDecimal financialIncome = financialDTO.getFinancialDetailList().stream()
+                .filter(e -> e.getIsDebt().equals(FinancialDebtEnum.PROFIT.getCode()))
+                .map(FinancialDetail::getFinancialPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // 统计待还负债
+        BigDecimal financialWaitDebt = financialDTO.getFinancialDetailList().stream()
+                .filter(e -> e.getIsDebt().equals(FinancialDebtEnum.DEBT.getCode()) && e.getHasPay().equals(FinancialPayEnum.NO_PAY.getCode()))
+                .map(FinancialDetail::getFinancialPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // 统计已还负债
+        BigDecimal financialClearDebt = financialDTO.getFinancialDetailList().stream()
+                .filter(e -> e.getIsDebt().equals(FinancialDebtEnum.DEBT.getCode()) && e.getHasPay().equals(FinancialPayEnum.HAS_PAY.getCode()))
+                .map(FinancialDetail::getFinancialPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // 算出总负债
+        BigDecimal financialDebt = financialWaitDebt.add(financialClearDebt);
+
+        // 算出当月结余
+        BigDecimal financialAmount = financialIncome.add(financialDebt);
+
+        financialMaster.setFinancialIncome(financialIncome);
+        financialMaster.setFinancialWaitDebt(financialWaitDebt);
+        financialMaster.setFinancialClearDebt(financialClearDebt);
+        financialMaster.setFinancialDebt(financialDebt);
+        financialMaster.setFinancialAmount(financialAmount);
+
+        // 存储主表
+        financialMaster = masterRepository.save(financialMaster);
+
+
+        // 存储明细表
+        for (FinancialDetail financialDetail: financialDTO.getFinancialDetailList()){
+            financialDetail.setMasterId(financialMaster.getMasterId());
+            detailRepository.save(financialDetail);
+        }
+
+        return financialDTO;
+    }
+
+    @Override
+    @Transactional
+    public FinancialDTO update(FinancialDTO financialDTO){
         // 识别是add还是update
         Boolean isAdd = financialDTO.getMasterId() == null;
         // 存储主表
