@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -62,11 +63,18 @@ public class FinancialServiceImpl implements FinancialService {
         // 存储主表
         FinancialMaster financialMaster = null;
         if (isAdd) {
+            // 获取financialDate，判断数据库中是否有重复月份
+            LocalDate financialDate = financialDTO.getFinancialDate();
+            financialDate = financialDate.withDayOfMonth(1); // 统一设置日期为1号
+            Optional<FinancialMaster> financialMasterOptional =  masterRepository.findFirstByFinancialDate(financialDate);
+            if (financialMasterOptional.isPresent()) { // 新增月份重复
+                throw new FinancialException(ResultEnum.MASTER_MONTH_EXIST);
+            }
+
+            // 拷贝属性DTO->dataobject
             financialMaster = new FinancialMaster();
             BeanUtils.copyProperties(financialDTO, financialMaster);
-            // 获取financialDate，判断数据库中是否有重复月份
-            // DateInfoDTO financialDateInfo  = DateUtils.getDateInfo(financialMaster.getFinancialDate());
-            // String commonDatePrefix = financialDateInfo.getYear() + "-" + financialDateInfo.getAddZeroMonth();
+
         } else {
             Optional<FinancialMaster> financialMasterOptional = masterRepository.findById(financialDTO.getMasterId());
             if (!financialMasterOptional.isPresent()){ // 未能查找到
@@ -75,6 +83,7 @@ public class FinancialServiceImpl implements FinancialService {
             financialMaster = financialMasterOptional.get();
             CopyUtils.copyPropertiesIgnoreNull(financialDTO, financialMaster);
         }
+        // 统计收入-负债
         BigDecimal totalAmount = financialDTO.getFinancialDetailList().stream()
                 .map(FinancialDetail::getFinancialPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

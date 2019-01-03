@@ -51,7 +51,8 @@ public class FinancialMasterRepositoryTest {
 
     @Test
     public void findFirstByFinancialDate() throws Exception{
-        LocalDate localDate = LocalDate.of(2019,1,2);
+        LocalDate localDate = LocalDate.of(2018,1,15);
+        localDate = localDate.withDayOfMonth(1);
         Optional<FinancialMaster> financialMasterOptional = repository.findFirstByFinancialDate(localDate);
         Assert.assertNotNull(financialMasterOptional.get());
     }

@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class FinancialServiceImplTest {
     public void create() throws Exception{
         FinancialDTO financialDTO = new FinancialDTO();
         financialDTO.setMasterId(14);
-        financialDTO.setFinancialDate(DateUtils.getDateByStr("2018-02-01 00:00:00", "yyyy-MM-dd HH:mm:ss"));
+        financialDTO.setFinancialDate(LocalDate.of(2018,3,1));
         List<FinancialDetail> financialDetailList = new ArrayList<>();
         for (int i=0; i<3;i++){
             FinancialDetail financialDetail = new FinancialDetail();

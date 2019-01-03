@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum ResultEnum {
-    MASTER_NOT_EXIST(0,"月表未找到");
+    MASTER_MONTH_EXIST(-1, "想要新增的月份已存在"),
+    MASTER_NOT_EXIST(-2,"想要修改的月份未找到");
     private Integer code;
     private String message;
 
