@@ -47,6 +47,12 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
+        <!--让jpa可以使用LocalDate、LocalDateTime-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-java8</artifactId>
+         <!--   <version>5.0.12.Final</version>-->
+        </dependency>
     </dependencies>
 
     <build>

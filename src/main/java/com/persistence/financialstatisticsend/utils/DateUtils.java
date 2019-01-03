@@ -3,10 +3,24 @@ package com.persistence.financialstatisticsend.utils;
 import com.persistence.financialstatisticsend.dto.DateInfoDTO;
 
 import java.text.SimpleDateFormat;
+import java.time.*;
 import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtils {
+
+
+    public static LocalDate dateParseLocalDate(Date date) {
+        Instant instant = date.toInstant();
+        ZoneId zoneId = ZoneId.of("Asia/Shanghai");
+
+        // atZone()方法返回在指定时区从此Instant生成的ZonedDateTime。
+        LocalDate localDate = instant.atZone(zoneId).toLocalDate();
+        return localDate;
+    }
+
+
+
     public static DateInfoDTO getDateInfo(Date date){
         Calendar calendar = Calendar.getInstance();//日历对象
         calendar.setTime(date);//设置当前日期
@@ -32,4 +46,7 @@ public class DateUtils {
         Date result=simpleDateFormat.parse(dateStr);
         return result;
     }
+
+
+
 }

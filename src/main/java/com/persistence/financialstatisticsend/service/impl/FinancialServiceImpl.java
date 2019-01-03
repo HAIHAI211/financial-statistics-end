@@ -65,8 +65,8 @@ public class FinancialServiceImpl implements FinancialService {
             financialMaster = new FinancialMaster();
             BeanUtils.copyProperties(financialDTO, financialMaster);
             // 获取financialDate，判断数据库中是否有重复月份
-            DateInfoDTO financialDateInfo  = DateUtils.getDateInfo(financialMaster.getFinancialDate());
-            String commonDatePrefix = financialDateInfo.getYear() + "-" + financialDateInfo.getAddZeroMonth();
+            // DateInfoDTO financialDateInfo  = DateUtils.getDateInfo(financialMaster.getFinancialDate());
+            // String commonDatePrefix = financialDateInfo.getYear() + "-" + financialDateInfo.getAddZeroMonth();
         } else {
             Optional<FinancialMaster> financialMasterOptional = masterRepository.findById(financialDTO.getMasterId());
             if (!financialMasterOptional.isPresent()){ // 未能查找到

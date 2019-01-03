@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -28,7 +29,7 @@ public class FinancialDetail {
 
     private BigDecimal financialPrice;
 
-    private Date deadline;
+    private LocalDate deadline;
 
     /*是否已经偿还 0表示未偿还 1表示已经还完*/
     private Integer hasPay = FinancialPayEnum.NO_PAY.getCode();

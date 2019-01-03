@@ -5,6 +5,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -15,8 +16,7 @@ public class FinancialMaster {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer masterId;
 
-    @Temporal(TemporalType.DATE)
-    private Date financialDate;
+    private LocalDate financialDate;
 
     private BigDecimal financialAmount;
 }
