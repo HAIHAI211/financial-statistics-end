@@ -40,7 +40,7 @@ public class FinancialController {
     public ResultVo getMasters(Integer pageNum, Integer pageSize){
         PageRequest pageRequest = new PageRequest(pageNum,pageSize);
         Page<FinancialMaster> financialMasterPage = financialService.findByOrderByFinancialDateAsc(pageRequest);
-        return ResultVoUtils.success(financialMasterPage);
+        return ResultVoUtils.success(financialMasterPage.getContent(), financialMasterPage.getTotalPages());
     }
 
     @GetMapping("category")
