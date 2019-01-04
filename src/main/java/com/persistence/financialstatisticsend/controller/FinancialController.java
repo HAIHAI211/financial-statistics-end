@@ -4,6 +4,7 @@ import com.persistence.financialstatisticsend.dataobject.FinancialCategory;
 import com.persistence.financialstatisticsend.dataobject.FinancialMaster;
 import com.persistence.financialstatisticsend.dataobject.FinancialUser;
 import com.persistence.financialstatisticsend.dto.FinancialDTO;
+import com.persistence.financialstatisticsend.exception.FinancialException;
 import com.persistence.financialstatisticsend.service.FinancialService;
 import com.persistence.financialstatisticsend.utils.ResultVoUtils;
 import com.persistence.financialstatisticsend.vo.ResultVo;
@@ -24,10 +25,17 @@ public class FinancialController {
 
     @PostMapping("create")
     public ResultVo create(@RequestBody FinancialDTO financialDTO){
-        financialDTO = financialService.create(financialDTO);
-        return ResultVoUtils.success();
+        try {
+            financialDTO = financialService.create(financialDTO);
+            return ResultVoUtils.success();
+        } catch (Exception e) {
+            if (e instanceof FinancialException) {
+                FinancialException financialException = (FinancialException) e;
+                return ResultVoUtils.error(financialException.getCode(), financialException.getMessage());
+            }
+            throw e;
+        }
     }
-
     @GetMapping("month")
     public ResultVo getMasters(Integer pageNum, Integer pageSize){
         PageRequest pageRequest = new PageRequest(pageNum,pageSize);
