@@ -1,7 +1,6 @@
 package com.persistence.financialstatisticsend.dataobject;
 
-import com.persistence.financialstatisticsend.enums.FinancialDebtEnum;
-import com.persistence.financialstatisticsend.enums.FinancialPayEnum;
+
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -30,8 +29,8 @@ public class FinancialDetail {
     private LocalDate deadline;
 
     /*是否已经偿还 0表示未偿还 1表示已经还完*/
-    private Integer hasPay = FinancialPayEnum.NO_PAY.getCode();
+    private Boolean hasPay;
 
     /*是否是负债 0表示负债 1表示盈利*/
-    private Integer isDebt = FinancialDebtEnum.DEBT.getCode();
+    private Boolean debt;
 }

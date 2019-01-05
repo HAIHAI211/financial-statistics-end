@@ -6,8 +6,6 @@ import com.persistence.financialstatisticsend.dataobject.FinancialMaster;
 import com.persistence.financialstatisticsend.dataobject.FinancialUser;
 import com.persistence.financialstatisticsend.dto.DateInfoDTO;
 import com.persistence.financialstatisticsend.dto.FinancialDTO;
-import com.persistence.financialstatisticsend.enums.FinancialDebtEnum;
-import com.persistence.financialstatisticsend.enums.FinancialPayEnum;
 import com.persistence.financialstatisticsend.enums.ResultEnum;
 import com.persistence.financialstatisticsend.exception.FinancialException;
 import com.persistence.financialstatisticsend.repository.FinancialCategoryRepository;
@@ -66,19 +64,19 @@ public class FinancialServiceImpl implements FinancialService {
     private FinancialMaster financialStatistic (FinancialDTO financialDTO, FinancialMaster financialMaster) {
         // 统计总收入
         BigDecimal financialIncome = financialDTO.getFinancialDetailList().stream()
-                .filter(e -> e.getIsDebt().equals(FinancialDebtEnum.PROFIT.getCode()))
+                .filter(e -> !e.getDebt())
                 .map(FinancialDetail::getFinancialPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         // 统计待还负债
         BigDecimal financialWaitDebt = financialDTO.getFinancialDetailList().stream()
-                .filter(e -> e.getIsDebt().equals(FinancialDebtEnum.DEBT.getCode()) && e.getHasPay().equals(FinancialPayEnum.NO_PAY.getCode()))
+                .filter(e -> e.getDebt() && !e.getHasPay())
                 .map(FinancialDetail::getFinancialPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         // 统计已还负债
         BigDecimal financialClearDebt = financialDTO.getFinancialDetailList().stream()
-                .filter(e -> e.getIsDebt().equals(FinancialDebtEnum.DEBT.getCode()) && e.getHasPay().equals(FinancialPayEnum.HAS_PAY.getCode()))
+                .filter(e -> e.getDebt() && e.getHasPay())
                 .map(FinancialDetail::getFinancialPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 

@@ -26,7 +26,7 @@ public class FinancialDetailRepositoryTest {
 
     @Test
     public void findByMasterIdOrderByUserIdAsc() {
-        List<FinancialDetail> financialDetailList = repository.findByMasterIdOrderByUserIdAsc(1);
+        List<FinancialDetail> financialDetailList = repository.findByMasterIdOrderByUserIdAsc(27);
         Assert.assertNotEquals(0, financialDetailList.size());
     }
 
