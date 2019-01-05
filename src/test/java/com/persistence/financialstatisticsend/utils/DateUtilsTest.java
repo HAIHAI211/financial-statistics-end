@@ -23,6 +23,7 @@ public class DateUtilsTest {
         DayOfWeek dow = localDate.getDayOfWeek();
         int len = localDate.lengthOfMonth();
         boolean bool = localDate.isLeapYear();
+        String xx = localDate.toString();
         LocalDate today = LocalDate.now();
     }
 
