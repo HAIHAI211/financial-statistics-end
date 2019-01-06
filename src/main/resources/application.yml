@@ -1,15 +1,15 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: haihai211
     url: jdbc:mysql://gz-cdb-6vny9hzq.sql.tencentcdb.com:62636/financial_statistics?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
     ##  Hikari 连接池配置 ------ 详细配置请访问：https://github.com/brettwooldridge/HikariCP
     hikari:
       ## 最小空闲连接数量
-      minimum-idle: 5
+      minimum-idle: 0
       ## 空闲连接存活最大时间，默认600000（10分钟）
-      idle-timeout: 180000
+      idle-timeout: 60000
       ## 连接池最大连接数，默认是10
       maximum-pool-size: 10
       ## 此属性控制从池返回的连接的默认自动提交行为,默认值：true
@@ -23,6 +23,7 @@ spring:
       connection-test-query: SELECT 1
   jpa:
     show-sql: true
+    open-in-view: false
 server:
   servlet:
     context-path: /harrisonlanny
