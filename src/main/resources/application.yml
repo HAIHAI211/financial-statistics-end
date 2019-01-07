@@ -1,6 +1,6 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: haihai211
     url: jdbc:mysql://gz-cdb-6vny9hzq.sql.tencentcdb.com:62636/financial_statistics?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
