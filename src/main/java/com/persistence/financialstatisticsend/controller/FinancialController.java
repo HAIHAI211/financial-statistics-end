@@ -10,6 +10,7 @@ import com.persistence.financialstatisticsend.exception.FinancialException;
 import com.persistence.financialstatisticsend.service.FinancialService;
 import com.persistence.financialstatisticsend.utils.ResultVoUtils;
 import com.persistence.financialstatisticsend.vo.ResultVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/financial")
+@Slf4j
 public class FinancialController {
 
     @Autowired
@@ -35,6 +37,7 @@ public class FinancialController {
         } catch (Exception e) {
             if (e instanceof FinancialException) {
                 FinancialException financialException = (FinancialException) e;
+                log.warn(financialException.getMessage());
                 return ResultVoUtils.error(financialException.getCode(), financialException.getMessage());
             }
             throw e;
