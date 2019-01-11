@@ -131,12 +131,15 @@ public class FinancialServiceImpl implements FinancialService {
     @Transactional
     public FinancialDTO update(FinancialDTO financialDTO){
 
-        // 判断是否存在
+        // 验证合法性
         Optional<FinancialMaster> financialMasterOptional = masterRepository.findById(financialDTO.getMasterId());
         if (!financialMasterOptional.isPresent()){ // 未能查找到
             throw new FinancialException(ResultEnum.MASTER_NOT_EXIST);
         }
         FinancialMaster financialMaster = financialMasterOptional.get();
+        if (financialDTO.getMasterId().intValue() != financialMaster.getMasterId()) { // 修改月份前后不一致
+            throw new FinancialException(ResultEnum.MASTER_NOT_SAME);
+        }
         CopyUtils.copyPropertiesIgnoreNull(financialDTO, financialMaster);
         // 财务统计
         financialMaster = financialStatistic(financialDTO, financialMaster);
