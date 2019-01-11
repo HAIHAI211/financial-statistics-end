@@ -61,6 +61,7 @@ public class FinancialServiceImpl implements FinancialService {
         return masterRepository.findById(masterId);
     }
 
+    /*财务处理*/
     private FinancialMaster financialStatistic (FinancialDTO financialDTO, FinancialMaster financialMaster) {
         // 统计总收入
         BigDecimal financialIncome = financialDTO.getFinancialDetailList().stream()
@@ -95,14 +96,21 @@ public class FinancialServiceImpl implements FinancialService {
         return financialMaster;
     }
 
+    /*设置日期统一为当月1号*/
+    private LocalDate setDayToOne(FinancialDTO financialDTO) {
+        // 获取financialDate，判断数据库中是否有重复月份
+        LocalDate financialDate = financialDTO.getFinancialDate();
+        financialDate = financialDate.withDayOfMonth(1); // 统一设置日期为1号
+        financialDTO.setFinancialDate(financialDate);
+        return financialDate;
+    }
+
     @Override
     @Transactional
     public FinancialDTO create(FinancialDTO financialDTO) {
 
-        // 获取financialDate，判断数据库中是否有重复月份
-        LocalDate financialDate = financialDTO.getFinancialDate();
-        financialDate = financialDate.withDayOfMonth(1); // 统一设置日期为1号
-        Optional<FinancialMaster> financialMasterOptional =  masterRepository.findFirstByFinancialDate(financialDate);
+        setDayToOne(financialDTO);
+        Optional<FinancialMaster> financialMasterOptional =  masterRepository.findFirstByFinancialDate(financialDTO.getFinancialDate());
         if (financialMasterOptional.isPresent()) { // 新增月份重复
             throw new FinancialException(ResultEnum.MASTER_MONTH_EXIST);
         }
@@ -131,13 +139,16 @@ public class FinancialServiceImpl implements FinancialService {
     @Transactional
     public FinancialDTO update(FinancialDTO financialDTO){
 
+        // 设置为1号
+        setDayToOne(financialDTO);
+
         // 验证合法性
         Optional<FinancialMaster> financialMasterOptional = masterRepository.findById(financialDTO.getMasterId());
         if (!financialMasterOptional.isPresent()){ // 未能查找到
             throw new FinancialException(ResultEnum.MASTER_NOT_EXIST);
         }
         FinancialMaster financialMaster = financialMasterOptional.get();
-        if (financialDTO.getMasterId().intValue() != financialMaster.getMasterId()) { // 修改月份前后不一致
+        if (!financialDTO.getFinancialDate().isEqual(financialMaster.getFinancialDate())) { // 修改月份前后不一致
             throw new FinancialException(ResultEnum.MASTER_NOT_SAME);
         }
         CopyUtils.copyPropertiesIgnoreNull(financialDTO, financialMaster);
@@ -152,10 +163,10 @@ public class FinancialServiceImpl implements FinancialService {
                 .map(FinancialDetail::getDetailId)
                 .collect(Collectors.toList());
         List<Integer> deleteDetailIds = detailRepository.findByMasterIdOrderByUserIdAsc(financialMaster.getMasterId()).stream()
-                .filter(e -> newDetailIds.contains(e.getDetailId()))
+                .filter(e -> !newDetailIds.contains(e.getDetailId()))
                 .map(FinancialDetail::getDetailId)
                 .collect(Collectors.toList());
-        detailRepository.deleteByDetailIdNotIn(deleteDetailIds);
+        detailRepository.deleteByDetailIdIn(deleteDetailIds);
 
         // 存储明细表
         for (FinancialDetail financialDetail: financialDTO.getFinancialDetailList()){

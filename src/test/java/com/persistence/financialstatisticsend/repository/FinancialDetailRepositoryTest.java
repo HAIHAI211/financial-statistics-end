@@ -44,7 +44,7 @@ public class FinancialDetailRepositoryTest {
     @Test
     @Transactional
     public void deleteByDetailIdNotIn(){
-        repository.deleteByDetailIdNotIn(Arrays.asList(1,2,3));
+        repository.deleteByDetailIdIn(Arrays.asList(1,2,3));
         List<FinancialDetail> financialDetailList = repository.findByMasterIdOrderByUserIdAsc(1);
 //        Assert.assertNotEquals(0, financialDetailList.size());
     }

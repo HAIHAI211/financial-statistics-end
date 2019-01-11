@@ -13,5 +13,6 @@ public interface FinancialDetailRepository extends JpaRepository<FinancialDetail
     void deleteByMasterId(Integer masterId);
 
     /*根据明细表id删除明细*/
-    void deleteByDetailIdNotIn(List<Integer> detailIdList);
+    void deleteByDetailIdIn(List<Integer> detailIdList);
+
 }
