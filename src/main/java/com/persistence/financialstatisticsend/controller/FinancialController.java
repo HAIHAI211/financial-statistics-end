@@ -52,6 +52,7 @@ public class FinancialController {
         } catch (Exception e) {
             if (e instanceof FinancialException) {
                 FinancialException financialException = (FinancialException) e;
+                log.warn(financialException.getMessage());
                 return ResultVoUtils.error(financialException.getCode(), financialException.getMessage());
             }
             throw e;
