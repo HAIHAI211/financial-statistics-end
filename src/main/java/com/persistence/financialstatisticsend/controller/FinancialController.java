@@ -63,7 +63,7 @@ public class FinancialController {
     @GetMapping("month")
     public ResultVo getMasters(Integer pageNum, Integer pageSize){
         PageRequest pageRequest = new PageRequest(pageNum,pageSize);
-        Page<FinancialMaster> financialMasterPage = financialService.findByOrderByFinancialDateAsc(pageRequest);
+        Page<FinancialMaster> financialMasterPage = financialService.getFinancialMasterByMonth(pageRequest);
         return ResultVoUtils.success(financialMasterPage.getContent(), financialMasterPage.getTotalPages());
     }
 
@@ -73,7 +73,7 @@ public class FinancialController {
         if (!financialMasterOptional.isPresent()) {
             return ResultVoUtils.error(ResultEnum.MASTER_NOT_EXIST);
         }
-        List<FinancialDetail> financialDetailList = financialService.findByMasterIdOrderByUserIdAsc(masterId);
+        List<FinancialDetail> financialDetailList = financialService.getFinancialDetailsOrder(masterId);
 
         FinancialDTO financialDTO = new FinancialDTO();
         BeanUtils.copyProperties(financialMasterOptional.get(), financialDTO);

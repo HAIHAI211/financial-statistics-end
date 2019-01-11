@@ -162,7 +162,7 @@ public class FinancialServiceImpl implements FinancialService {
                 .filter(e -> e.getDetailId() != null)
                 .map(FinancialDetail::getDetailId)
                 .collect(Collectors.toList());
-        List<Integer> deleteDetailIds = detailRepository.findByMasterIdOrderByUserIdAsc(financialMaster.getMasterId()).stream()
+        List<Integer> deleteDetailIds = detailRepository.findByMasterId(financialMaster.getMasterId()).stream()
                 .filter(e -> !newDetailIds.contains(e.getDetailId()))
                 .map(FinancialDetail::getDetailId)
                 .collect(Collectors.toList());
@@ -178,17 +178,12 @@ public class FinancialServiceImpl implements FinancialService {
     }
 
     @Override
-    public Page<FinancialMaster> findByOrderByFinancialDateAsc(Pageable pageable) {
+    public Page<FinancialMaster> getFinancialMasterByMonth(Pageable pageable) {
         return masterRepository.findByOrderByFinancialDateAsc(pageable);
     }
 
     @Override
-    public List<FinancialDetail> findByMasterIdOrderByUserIdAsc(Integer masterId) {
-        return detailRepository.findByMasterIdOrderByUserIdAsc(masterId);
-    }
-
-    @Override
-    public void delete(Integer masterId) {
-        // todo
+    public List<FinancialDetail> getFinancialDetailsOrder(Integer masterId) {
+        return detailRepository.findByMasterIdOrderByUserIdAscHasPayAscFinancialPriceDesc(masterId);
     }
 }

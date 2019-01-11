@@ -15,17 +15,14 @@ public interface FinancialService {
     /*创建报表*/
     FinancialDTO create(FinancialDTO financialDTO);
 
-    /*根据月份顺序查询主报表*/
-    Page<FinancialMaster> findByOrderByFinancialDateAsc(Pageable pageable);
-
-    /*根据主表id查询明细表*/
-    List<FinancialDetail> findByMasterIdOrderByUserIdAsc(Integer masterId);
+    /*根据月份顺序查询主表*/
+    Page<FinancialMaster> getFinancialMasterByMonth(Pageable pageable);
 
     /*根据主表id查询主表*/
     Optional<FinancialMaster> getFinancialMasterById(Integer masterId);
 
-    /*删除报表*/
-    void delete(Integer masterId);
+    /*根据主表id查询明细表(多个筛选条件)*/
+    List<FinancialDetail> getFinancialDetailsOrder(Integer masterId);
 
     /*获取类别*/
     List<FinancialCategory> getFinancialCategoryList();
